@@ -4,8 +4,6 @@ const { app } = require("../../app/app");
 const testData = require("../../db/data/test-data");
 const seed = require("../../db/seeds/seed");
 
-console.log(testData);
-
 beforeAll(() => {
   return seed(testData);
 });
