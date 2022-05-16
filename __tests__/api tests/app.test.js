@@ -4,8 +4,6 @@ const { app } = require("../../app/app");
 const testData = require("../../db/data/test-data");
 const seed = require("../../db/seeds/seed");
 
-console.log(testData);
-
 beforeAll(() => {
   return seed(testData);
 });
@@ -37,6 +35,42 @@ describe("GET: api/categories", () => {
       .expect(404)
       .then(({ body: { message } }) => {
         expect(message).toBe("Route Not Found");
+      });
+  });
+});
+
+describe("GET: api/reviews", () => {
+  test("200: should return a status code of 200 and an array of objects with properties slug and descruption on them", () => {
+    return request(app)
+      .get("/api/categories")
+      .expect(200)
+      .then(({ body: { categories } }) => {
+        expect(categories).toBeInstanceOf(Array);
+        expect(categories).toHaveLength(4);
+        categories.forEach((category) => {
+          expect.objectContaining({
+            slug: expect.any(String),
+            description: expect.any(String),
+          });
+        });
+      });
+  });
+
+  test("404: should return a status code of 404 when an incorrect path is asked for", () => {
+    return request(app)
+      .get("/api/reviews/20000")
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Item Not Found");
+      });
+  });
+
+  test("400: should return a status of 400 when an invalid request is asked", () => {
+    return request(app)
+      .get("/api/reviews/coolio")
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Bad Request, Very Bad Request!");
       });
   });
 });
