@@ -58,10 +58,10 @@ describe("GET: api/reviews", () => {
 
   test("404: should return a status code of 404 when an incorrect path is asked for", () => {
     return request(app)
-      .get("/api/wrong_path")
+      .get("/api/reviews/20000")
       .expect(404)
       .then(({ body: { message } }) => {
-        expect(message).toBe("Route Not Found");
+        expect(message).toBe("Item Not Found");
       });
   });
 
