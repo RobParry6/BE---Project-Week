@@ -1,5 +1,5 @@
 const express = require("express");
-const { getCategories, getReview } = require("./controllers/controller");
+const { getCategories, getReview } = require("./controllers");
 
 const app = express();
 app.use(express.json());
@@ -19,7 +19,9 @@ app.use((err, request, response, next) => {
 
 app.use((err, request, response, next) => {
   if ((err.code = "22P02")) {
-    response.status(400).send({ message: "Bad Request, Very Bad Request!" });
+    response
+      .status(400)
+      .send({ message: "Bad Request, Very Bad Request! (Invalid Request)" });
   } else next(err);
 });
 

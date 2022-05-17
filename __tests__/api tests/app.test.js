@@ -12,6 +12,17 @@ afterAll(() => {
   db.end();
 });
 
+describe("404: Invalid Endpoint", () => {
+  test("404: Should return a status code of 404 when an incorrect endpoint is asked for", () => {
+    return request(app)
+      .get("/api/wrong_path")
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Route Not Found");
+      });
+  });
+});
+
 describe("GET: api/categories", () => {
   test("200: should return a status code of 200 and an array of objects with properties slug and descruption on them", () => {
     return request(app)
@@ -28,18 +39,9 @@ describe("GET: api/categories", () => {
         });
       });
   });
-
-  test("404: should return a status code of 404 when an incorrect path is asked for", () => {
-    return request(app)
-      .get("/api/wrong_path")
-      .expect(404)
-      .then(({ body: { message } }) => {
-        expect(message).toBe("Route Not Found");
-      });
-  });
 });
 
-describe("GET: api/reviews", () => {
+describe("GET: api/reviews/:review", () => {
   test("200: should return a status code of 200 and an array of objects with properties slug and descruption on them", () => {
     return request(app)
       .get("/api/categories")
@@ -61,7 +63,7 @@ describe("GET: api/reviews", () => {
       .get("/api/reviews/20000")
       .expect(404)
       .then(({ body: { message } }) => {
-        expect(message).toBe("Item Not Found");
+        expect(message).toBe("Requested Item Not Found Within the Database");
       });
   });
 
@@ -70,7 +72,9 @@ describe("GET: api/reviews", () => {
       .get("/api/reviews/coolio")
       .expect(400)
       .then(({ body: { message } }) => {
-        expect(message).toBe("Bad Request, Very Bad Request!");
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
+        );
       });
   });
 });

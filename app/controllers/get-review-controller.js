@@ -1,10 +1,4 @@
-const { fetchCategories, fetchReview } = require("../models/model");
-
-exports.getCategories = (request, response) => {
-  fetchCategories().then((categories) => {
-    response.status(200).send({ categories });
-  });
-};
+const { fetchReview } = require("../models");
 
 exports.getReview = (request, response, next) => {
   const { reviews } = request.params;
