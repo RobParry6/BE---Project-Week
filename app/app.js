@@ -1,30 +1,23 @@
 const express = require("express");
-const { getCategories, getReview } = require("./controllers/controller");
+const { getCategories, getReview, alterVotesCount } = require("./controllers");
+const {
+  invalidEndpoint,
+  invalidNumberRequest,
+  internalServerError,
+  psqlError,
+} = require("./controllers/error-handler-controller");
 
 const app = express();
 app.use(express.json());
 
 app.get("/api/categories", getCategories);
-app.get("/api/reviews/:reviews", getReview);
+app.get("/api/reviews/:review_id", getReview);
 
-app.get("/*", (request, response) => {
-  response.status(404).send({ message: "Route Not Found" });
-});
+app.patch("/api/reviews/:review_id", alterVotesCount);
 
-app.use((err, request, response, next) => {
-  if (err.status && err.message) {
-    response.status(err.status).send({ message: err.message });
-  } else next(err);
-});
+app.get("/*", invalidEndpoint);
+app.use(invalidNumberRequest);
+app.use(psqlError);
+app.use(internalServerError);
 
-app.use((err, request, response, next) => {
-  if ((err.code = "22P02")) {
-    response.status(400).send({ message: "Bad Request, Very Bad Request!" });
-  } else next(err);
-});
-
-app.use((err, request, response, next) => {
-  response.status(500).send({ message: "Internal Server Error" });
-});
-
-module.exports = { app };
+module.exports = app;
