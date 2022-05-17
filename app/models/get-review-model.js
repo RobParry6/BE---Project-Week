@@ -7,7 +7,6 @@ exports.fetchReview = (review_id) => {
       [review_id]
     )
     .then(({ rows }) => {
-      console.log(rows);
       if (!rows.length) {
         return Promise.reject({
           status: 404,
