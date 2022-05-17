@@ -62,7 +62,7 @@ describe("GET: /api/reviews/:review_id", () => {
       });
   });
 
-  test.only("200: the returning object should have a comment_count property that references the comments data", () => {
+  test("200: the returning object should have a comment_count property that references the comments data", () => {
     return request(app)
       .get("/api/reviews/3")
       .expect(200)
