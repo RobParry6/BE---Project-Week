@@ -83,7 +83,7 @@ describe("GET: api/reviews/:review_id", () => {
   });
 });
 
-describe.only("PATCH: api/reviews/:review_id", () => {
+describe("PATCH: api/reviews/:review_id", () => {
   test("201: Should return status code of 201 when a sucessful patch request is made to the review endpoint. Should send an object with a property of inc_votes with increments the votes by the desired amount", () => {
     const incVotes = { inc_votes: 1 };
     const expexcted = {
