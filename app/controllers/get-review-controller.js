@@ -1,8 +1,8 @@
 const { fetchReview } = require("../models");
 
 exports.getReview = (request, response, next) => {
-  const { reviews } = request.params;
-  fetchReview(reviews)
+  const { review_id } = request.params;
+  fetchReview(review_id)
     .then((review) => {
       response.status(200).send({ review });
     })
