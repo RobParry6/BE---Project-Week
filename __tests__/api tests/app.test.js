@@ -12,7 +12,7 @@ afterAll(() => {
   db.end();
 });
 
-describe("404: Invalid Endpoint", () => {
+describe("404: /Invalid Endpoint", () => {
   test("404: Should return a status code of 404 when an incorrect endpoint is asked for", () => {
     return request(app)
       .get("/api/wrong_path")
@@ -23,7 +23,7 @@ describe("404: Invalid Endpoint", () => {
   });
 });
 
-describe("GET: api/categories", () => {
+describe("GET: /api/categories", () => {
   test("200: should return a status code of 200 and an array of objects with properties slug and descruption on them", () => {
     return request(app)
       .get("/api/categories")
@@ -41,7 +41,7 @@ describe("GET: api/categories", () => {
   });
 });
 
-describe("GET: api/reviews/:review_id", () => {
+describe("GET: /api/reviews/:review_id", () => {
   test("200: should return a status code of 200 and an object of the requested review", () => {
     return request(app)
       .get("/api/reviews/3")
@@ -83,7 +83,7 @@ describe("GET: api/reviews/:review_id", () => {
   });
 });
 
-describe("PATCH: api/reviews/:review_id", () => {
+describe("PATCH: /api/reviews/:review_id", () => {
   test("201: Should return status code of 201 when a sucessful patch request is made to the review endpoint. Should send an object with a property of inc_votes with increments the votes by the desired amount", () => {
     const incVotes = { inc_votes: 1 };
     const expexcted = {
@@ -145,6 +145,25 @@ describe("PATCH: api/reviews/:review_id", () => {
         expect(message).toBe(
           "Bad Request, Very Bad Request! (Invalid Request)"
         );
+      });
+  });
+});
+
+describe("GET: /api/users", () => {
+  test("200: Should return a status code of 200 and an array of objects containing user data", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body: { users } }) => {
+        expect(users).toHaveLength(4);
+        expect(users).toBeInstanceOf(Array);
+        users.forEach((user) => {
+          expect.objectContaining({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
       });
   });
 });
