@@ -47,7 +47,7 @@ describe("GET: api/reviews/:review_id", () => {
       .get("/api/reviews/3")
       .expect(200)
       .then(({ body: { review } }) => {
-        expect(review).toEqual({
+        expect.objectContaining({
           review_id: 3,
           title: "Ultimate Werewolf",
           designer: "Akihisa Okui",
@@ -60,6 +60,21 @@ describe("GET: api/reviews/:review_id", () => {
           votes: 5,
         });
       });
+  });
+
+  test.only("200: the returning object should have a comment_count property that references the comments data", () => {
+    return request(app)
+      .get("/api/reviews/3")
+      .expect(200)
+      .then(
+        ({
+          body: {
+            review: { comment_count },
+          },
+        }) => {
+          expect(comment_count).toBe(3);
+        }
+      );
   });
 
   test("404: should return a status code of 404 when an incorrect path is asked for", () => {
