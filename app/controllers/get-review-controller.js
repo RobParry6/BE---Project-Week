@@ -3,7 +3,7 @@ const { fetchReview } = require("../models");
 exports.getReview = (request, response, next) => {
   const { review_id } = request.params;
   fetchReview(review_id)
-    .then((review) => {
+    .then(([review]) => {
       response.status(200).send({ review });
     })
     .catch((err) => {
