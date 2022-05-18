@@ -41,6 +41,28 @@ describe("GET: /api/categories", () => {
   });
 });
 
+describe("POST: /api/reviews/:review_id/comments", () => {
+  test("201: Should return a status code of 201, sucessfully post an object to the database and return the post", () => {
+    const newPost = { username: "bainesface", body: "A timeless classic!" };
+
+    return request(app)
+      .post("/api/reviews/:review_id/comments")
+      .send(newPost)
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            body: "A timeless classic!",
+            votes: 0,
+            author: "bainesface",
+            review_id: 13,
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+});
+
 describe("GET: /api/reviews/:review_id", () => {
   test("200: should return a status code of 200 and an object of the requested review to the /api/reviews/:review_id endpoint", () => {
     return request(app)
@@ -162,7 +184,7 @@ describe("PATCH: /api/reviews/:review_id", () => {
       .send(incVotes)
       .expect(201)
       .then(({ body: { review } }) => {
-        expect(review).toEqual(expexcted);
+        expect(review).toEqual(expect.objectContaining(expexcted));
       });
   });
 
