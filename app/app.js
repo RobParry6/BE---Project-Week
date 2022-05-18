@@ -4,6 +4,7 @@ const {
   getReview,
   alterVotesCount,
   getUsers,
+  getAllReviews,
 } = require("./controllers");
 const {
   invalidEndpoint,
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.get("/api/categories", getCategories);
 app.get("/api/reviews/:review_id", getReview);
+app.get("/api/reviews", getAllReviews);
 app.get("/api/users", getUsers);
 
 app.patch("/api/reviews/:review_id", alterVotesCount);
