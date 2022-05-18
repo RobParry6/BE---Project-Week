@@ -3,6 +3,7 @@ const { getReview } = require("./get-review-controller");
 const { alterVotesCount } = require("./patch-review-controller");
 const { getUsers } = require("./get-users-controller");
 const { getAllReviews } = require("./get-all-reviews");
+const { getComments } = require("./get-comments-controller");
 
 module.exports = {
   getCategories,
@@ -10,4 +11,5 @@ module.exports = {
   alterVotesCount,
   getUsers,
   getAllReviews,
+  getComments,
 };
