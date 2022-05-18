@@ -13,7 +13,7 @@ exports.fetchComments = (review_id) => {
 
   return Promise.all([commentPromise, reviewPromise]).then(
     ([commentResults, reviewResults]) => {
-      if (!reviewResults.rows.length && !commentResults.rows.length) {
+      if (!reviewResults.rows.length) {
         return Promise.reject({
           status: 404,
           message: "Requested Item Not Found Within the Database",
