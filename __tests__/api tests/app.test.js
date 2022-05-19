@@ -160,6 +160,32 @@ describe("GET: /api/reviews/:review_id", () => {
   });
 });
 
+describe("GET: /api/reviews?query", () => {
+  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key", () => {
+    return request(app)
+      .get("/api/reviews?search_id=title")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "title", descending: true });
+        expect(reviews[12]).toEqual(
+          expect.objectContaining({
+            review_id: 3,
+            title: "Ultimate Werewolf",
+            designer: "Akihisa Okui",
+            owner: "bainesface",
+            review_img_url:
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+            review_body: "We couldn't find the werewolf!",
+            category: "social deduction",
+            created_at: "2021-01-18T10:01:41.251Z",
+            votes: 5,
+            comment_count: 3,
+          })
+        );
+      });
+  });
+});
+
 describe("GET: /api/reviews", () => {
   test("200: should return a status code of 200 and an array of the reviews when the /api/review is called", () => {
     return request(app)
