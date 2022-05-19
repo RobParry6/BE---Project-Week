@@ -41,6 +41,7 @@ describe("GET: /api/categories", () => {
   });
 });
 
+
 describe("POST: /api/reviews/:review_id/comments", () => {
   test("201: Should return a status code of 201, sucessfully post an object to the database and return the post", () => {
     const newPost = { user_name: "bainesface", body: "A timeless classic!" };
@@ -98,6 +99,54 @@ describe("POST: /api/reviews/:review_id/comments", () => {
       .then(({ body: { message } }) => {
         expect(message).toBe(
           "Who?! Not sure who you mean! (Route not found: Invalid User)"
+
+describe("GET: /api/reviews/:review_id/comments", () => {
+  test("200: Should return a status code of 200 and an array of comments for the given review", () => {
+    return request(app)
+      .get("/api/reviews/3/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments).toHaveLength(3);
+        comments.forEach((comment) => {
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            review_id: expect.any(Number),
+          });
+        });
+      });
+  });
+
+  test("404: Should return a status code of 404 when a valid number is passed into the parameter but does not match a valid ID", () => {
+    return request(app)
+      .get("/api/reviews/20000/comments")
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Requested Item Not Found Within the Database");
+      });
+  });
+
+  test("200: Should return a status code of 200 when a valid number is passed but has no comments", () => {
+    return request(app)
+      .get("/api/reviews/1/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments).toHaveLength(0);
+      });
+  });
+
+  test("400: Should return a status code of 400 when an incorrect data type is passed into the endpoint", () => {
+    return request(app)
+      .get("/api/reviews/coolio/comments")
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
         );
       });
   });
