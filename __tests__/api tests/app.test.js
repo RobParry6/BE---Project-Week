@@ -289,6 +289,28 @@ describe("GET: /api/reviews?query", () => {
         });
     });
   });
+
+  test("400: should return a status code of 400 when a user tries to enter a non-valid sort_by query", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=coolio")
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
+        );
+      });
+  });
+
+  test("400: should return a status code of 400 when a user tries to enter a non-valid order query", () => {
+    return request(app)
+      .get("/api/reviews?order=coolio")
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
+        );
+      });
+  });
 });
 
 describe("GET: /api/reviews", () => {

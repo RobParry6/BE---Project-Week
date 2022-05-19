@@ -5,6 +5,22 @@ exports.fetchAllReviews = (
   order = "DESC",
   category
 ) => {
+  if (
+    !["title", "designer", "owner", "category", "created_at"].includes(sort_by)
+  ) {
+    return Promise.reject({
+      status: 400,
+      message: "Bad Request, Very Bad Request! (Invalid Request)",
+    });
+  }
+
+  if (!["asc", "desc", "ASC", "DESC"].includes(order)) {
+    return Promise.reject({
+      status: 400,
+      message: "Bad Request, Very Bad Request! (Invalid Request)",
+    });
+  }
+
   let queryString = `SELECT reviews.*, COUNT (comment_id) ::int AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id`;
 
   order = order.toUpperCase();
@@ -15,7 +31,6 @@ exports.fetchAllReviews = (
   queryString += ` GROUP BY reviews.review_id ORDER BY reviews.${sort_by} ${order};`;
 
   return db.query(queryString).then(({ rows }) => {
-    console.log(rows);
     if (!rows.length) {
       return Promise.reject({
         status: 404,
