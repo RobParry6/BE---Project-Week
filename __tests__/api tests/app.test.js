@@ -209,6 +209,168 @@ describe("GET: /api/reviews/:review_id", () => {
   });
 });
 
+describe("GET: /api/reviews?query", () => {
+  describe("200", () => {
+    test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case TITLE", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=title")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "title", descending: true });
+          expect(reviews[0].title).toBe("Ultimate Werewolf");
+          expect(reviews[12].title).toBe(
+            "A truly Quacking Game; Quacks of Quedlinburg"
+          );
+        });
+    });
+
+    test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case DESIGNER", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=designer")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "designer", descending: true });
+          expect(reviews[0].designer).toBe("Wolfgang Warsch");
+          expect(reviews[12].designer).toBe("Akihisa Okui");
+        });
+    });
+
+    test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case OWNER", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=owner")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "owner", descending: true });
+          expect(reviews[0].owner).toBe("philippaclaire9");
+          expect(reviews[12].owner).toBe("bainesface");
+        });
+    });
+
+    test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case CATEGORY", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=category")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "category", descending: true });
+          expect(reviews[0].category).toBe("social deduction");
+          expect(reviews[12].category).toBe("dexterity");
+        });
+    });
+
+    test("200: Should return a status code of 200 and should return the ordered array in ascending ORDER", () => {
+      return request(app)
+        .get("/api/reviews?order=asc")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "created_at", descending: false });
+          expect(reviews[0].created_at).toBe("1970-01-10T02:08:38.400Z");
+          expect(reviews[12].created_at).toBe("2021-01-25T11:16:54.963Z");
+        });
+    });
+
+    test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by TITLE", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=title&order=asc")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "title", descending: false });
+          expect(reviews[0].title).toBe(
+            "A truly Quacking Game; Quacks of Quedlinburg"
+          );
+          expect(reviews[12].title).toBe("Ultimate Werewolf");
+        });
+    });
+
+    test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by DESIGNER", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=designer&order=asc")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "designer", descending: false });
+          expect(reviews[0].designer).toBe("Akihisa Okui");
+          expect(reviews[12].designer).toBe("Wolfgang Warsch");
+        });
+    });
+
+    test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by OWNER", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=owner&order=asc")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "owner", descending: false });
+          expect(reviews[0].owner).toBe("bainesface");
+          expect(reviews[12].owner).toBe("philippaclaire9");
+        });
+    });
+
+    test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by CATEGORY", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=category&order=asc")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "category", descending: false });
+          expect(reviews[0].category).toBe("dexterity");
+          expect(reviews[12].category).toBe("social deduction");
+        });
+    });
+
+    test("200: Should return a code of 200 and return a filtered array of the desired category", () => {
+      return request(app)
+        .get("/api/reviews?category=social+deduction")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          reviews.forEach((review) => {
+            expect(review.category).toBe("social deduction");
+          });
+        });
+    });
+
+    test("200: SHould return a sataus code of 200 when all the queries are asked for", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=title&order=asc&category=social+deduction")
+        .expect(200)
+        .then(({ body: { reviews } }) => {
+          expect(reviews).toBeSorted({ key: "title", descending: false });
+          expect(reviews[0].title).toBe(
+            "A truly Quacking Game; Quacks of Quedlinburg"
+          );
+          expect(reviews[10].title).toBe("Ultimate Werewolf");
+        });
+    });
+  });
+
+  test("400: should return a status code of 400 when a user tries to enter a non-valid sort_by query", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=coolio")
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
+        );
+      });
+  });
+
+  test("400: should return a status code of 400 when a user tries to enter a non-valid order query", () => {
+    return request(app)
+      .get("/api/reviews?order=coolio")
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
+        );
+      });
+  });
+
+  test("404: should return a status code of 400 when a user tries to enter a non-existant category", () => {
+    return request(app)
+      .get("/api/reviews?category=coolio")
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Requested Item Not Found Within the Database");
+      });
+  });
+});
+
 describe("GET: /api/reviews", () => {
   test("200: should return a status code of 200 and an array of the reviews when the /api/review is called", () => {
     return request(app)
