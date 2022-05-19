@@ -161,7 +161,7 @@ describe("GET: /api/reviews/:review_id", () => {
 });
 
 describe("GET: /api/reviews?query", () => {
-  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case title", () => {
+  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case TITLE", () => {
     return request(app)
       .get("/api/reviews?sort_by=title")
       .expect(200)
@@ -174,7 +174,7 @@ describe("GET: /api/reviews?query", () => {
       });
   });
 
-  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case designer", () => {
+  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case DESIGNER", () => {
     return request(app)
       .get("/api/reviews?sort_by=designer")
       .expect(200)
@@ -185,7 +185,7 @@ describe("GET: /api/reviews?query", () => {
       });
   });
 
-  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case owner", () => {
+  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case OWNER", () => {
     return request(app)
       .get("/api/reviews?sort_by=owner")
       .expect(200)
@@ -196,18 +196,18 @@ describe("GET: /api/reviews?query", () => {
       });
   });
 
-  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case category", () => {
+  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case CATEGORY", () => {
     return request(app)
       .get("/api/reviews?sort_by=category")
       .expect(200)
       .then(({ body: { reviews } }) => {
         expect(reviews).toBeSorted({ key: "category", descending: true });
-        expect(reviews[12].category).toBe("dexterity");
         expect(reviews[0].category).toBe("social deduction");
+        expect(reviews[12].category).toBe("dexterity");
       });
   });
 
-  test("200: Should return a status code of 200 and should return the ordered array in ascending order", () => {
+  test("200: Should return a status code of 200 and should return the ordered array in ascending ORDER", () => {
     return request(app)
       .get("/api/reviews?order=asc")
       .expect(200)
@@ -218,7 +218,7 @@ describe("GET: /api/reviews?query", () => {
       });
   });
 
-  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by title", () => {
+  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by TITLE", () => {
     return request(app)
       .get("/api/reviews?sort_by=title&order=asc")
       .expect(200)
@@ -231,7 +231,7 @@ describe("GET: /api/reviews?query", () => {
       });
   });
 
-  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by designer", () => {
+  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by DESIGNER", () => {
     return request(app)
       .get("/api/reviews?sort_by=designer&order=asc")
       .expect(200)
@@ -242,7 +242,7 @@ describe("GET: /api/reviews?query", () => {
       });
   });
 
-  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by owner", () => {
+  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by OWNER", () => {
     return request(app)
       .get("/api/reviews?sort_by=owner&order=asc")
       .expect(200)
@@ -250,6 +250,41 @@ describe("GET: /api/reviews?query", () => {
         expect(reviews).toBeSorted({ key: "owner", descending: false });
         expect(reviews[0].owner).toBe("bainesface");
         expect(reviews[12].owner).toBe("philippaclaire9");
+      });
+  });
+
+  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by CATEGORY", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=category&order=asc")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "category", descending: false });
+        expect(reviews[0].category).toBe("dexterity");
+        expect(reviews[12].category).toBe("social deduction");
+      });
+  });
+
+  test("200: Should return a code of 200 and return a filtered array of the desired category", () => {
+    return request(app)
+      .get("/api/reviews?category=social+deduction")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        reviews.forEach((review) => {
+          expect(review.category).toBe("social deduction");
+        });
+      });
+  });
+
+  test("200: SHould return a sataus code of 200 when all the queries are asked for", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=title&order=asc&category=social+deduction")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "title", descending: false });
+        expect(reviews[0].title).toBe(
+          "A truly Quacking Game; Quacks of Quedlinburg"
+        );
+        expect(reviews[10].title).toBe("Ultimate Werewolf");
       });
   });
 });
