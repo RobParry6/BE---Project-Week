@@ -191,8 +191,8 @@ describe("GET: /api/reviews?query", () => {
       .expect(200)
       .then(({ body: { reviews } }) => {
         expect(reviews).toBeSorted({ key: "owner", descending: true });
-        expect(reviews[12].owner).toBe("bainesface");
         expect(reviews[0].owner).toBe("philippaclaire9");
+        expect(reviews[12].owner).toBe("bainesface");
       });
   });
 
@@ -231,7 +231,7 @@ describe("GET: /api/reviews?query", () => {
       });
   });
 
-  test.only("200: Should return a status code of 200 and sort and return the ordered array in ascending order by designer", () => {
+  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by designer", () => {
     return request(app)
       .get("/api/reviews?sort_by=designer&order=asc")
       .expect(200)
@@ -239,6 +239,17 @@ describe("GET: /api/reviews?query", () => {
         expect(reviews).toBeSorted({ key: "designer", descending: false });
         expect(reviews[0].designer).toBe("Akihisa Okui");
         expect(reviews[12].designer).toBe("Wolfgang Warsch");
+      });
+  });
+
+  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by owner", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=owner&order=asc")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "owner", descending: false });
+        expect(reviews[0].owner).toBe("bainesface");
+        expect(reviews[12].owner).toBe("philippaclaire9");
       });
   });
 });
