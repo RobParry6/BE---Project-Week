@@ -22,7 +22,8 @@ exports.fetchAllReviews = (
   }
 
   db.query(`SELECT slug FROM categories`).then(({ rows }) => {
-    if (category & !rows.includes(category)) {
+    const categoryList = rows.map((category) => category.slug);
+    if (category & !categoryList.includes(category)) {
       return Promise.reject({
         status: 404,
         message: "Requested Item Not Found Within the Database",
