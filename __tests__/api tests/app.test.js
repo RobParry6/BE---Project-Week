@@ -311,6 +311,15 @@ describe("GET: /api/reviews?query", () => {
         );
       });
   });
+
+  test("404: should return a status code of 400 when a user tries to enter a non-existant category", () => {
+    return request(app)
+      .get("/api/reviews?category=coolio")
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Requested Item Not Found Within the Database");
+      });
+  });
 });
 
 describe("GET: /api/reviews", () => {

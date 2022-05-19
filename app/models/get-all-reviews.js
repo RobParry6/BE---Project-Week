@@ -21,6 +21,15 @@ exports.fetchAllReviews = (
     });
   }
 
+  db.query(`SELECT slug FROM categories`).then(({ rows }) => {
+    if (category & !rows.includes(category)) {
+      return Promise.reject({
+        status: 404,
+        message: "Requested Item Not Found Within the Database",
+      });
+    }
+  });
+
   let queryString = `SELECT reviews.*, COUNT (comment_id) ::int AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id`;
 
   order = order.toUpperCase();
