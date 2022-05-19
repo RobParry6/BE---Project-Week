@@ -6,7 +6,11 @@ exports.removeComment = (comment_id) => {
       comment_id,
     ])
     .then(({ rows }) => {
-      console.log(rows);
-      return true;
+      if (!rows.length) {
+        return Promise.reject({
+          status: 404,
+          message: "Requested Item Not Found Within the Database",
+        });
+      }
     });
 };

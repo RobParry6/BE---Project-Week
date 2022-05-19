@@ -453,4 +453,24 @@ describe("DELETE: /api/comments/:comment_id", () => {
   test("204: Should return a status of 204 and delete the comment at the specific comment_id", () => {
     return request(app).delete("/api/comments/3").expect(204);
   });
+
+  test("400: Should return a status code of 404 when the comment_id in the path isn't a number", () => {
+    return request(app)
+      .delete("/api/comments/coolio")
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
+        );
+      });
+  });
+
+  test("404: Should return a status code of 404 when the comment_id in the path isn't a number", () => {
+    return request(app)
+      .delete("/api/comments/20000")
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Requested Item Not Found Within the Database");
+      });
+  });
 });
