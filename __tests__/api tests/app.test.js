@@ -448,3 +448,9 @@ describe("GET: /api/users", () => {
       });
   });
 });
+
+describe("DELETE: /api/comments/:comment_id", () => {
+  test("204: Should return a status of 204 and delete the comment at the specific comment_id", () => {
+    return request(app).delete("/api/comments/3").expect(204);
+  });
+});

@@ -6,6 +6,7 @@ const {
   getUsers,
   getAllReviews,
   createComment,
+  deleteComment,
 } = require("./controllers");
 const {
   invalidEndpoint,
@@ -26,6 +27,8 @@ app.get("/api/users", getUsers);
 app.patch("/api/reviews/:review_id", alterVotesCount);
 
 app.post("/api/reviews/:review_id/comments", createComment);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.get("/*", invalidEndpoint);
 app.use(invalidNumberRequest);
