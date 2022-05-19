@@ -1,18 +1,20 @@
 const db = require("../../db/connection");
 
-exports.fetchAllReviews = (review_id) => {
-  let queryString =
-    "SELECT reviews.*, COUNT (comment_id) ::int AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id";
+exports.fetchAllReviews = (sort_by, order = "DESC") => {
+  let queryString = `SELECT reviews.*, COUNT (comment_id) ::int AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id GROUP BY reviews.review_id`;
   const variableArray = [];
 
-  if (review_id) {
-    queryString += " WHERE reviews.review_id = $1 GROUP BY reviews.review_id;";
-    variableArray.push(review_id);
+  order = order.toUpperCase();
+  console.log(sort_by, order);
+
+  if (sort_by) {
+    queryString += ` ORDER BY reviews.${sort_by} ${order};`;
+    variableArray.push(sort_by);
   } else {
-    queryString +=
-      " GROUP BY reviews.review_id ORDER BY reviews.created_at DESC";
+    queryString += ` ORDER BY reviews.created_at ${order}`;
   }
-  return db.query(queryString, variableArray).then(({ rows }) => {
+  return db.query(queryString).then(({ rows }) => {
+    console.log(rows);
     if (!rows.length) {
       return Promise.reject({
         status: 404,

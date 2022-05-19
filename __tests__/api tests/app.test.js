@@ -161,27 +161,84 @@ describe("GET: /api/reviews/:review_id", () => {
 });
 
 describe("GET: /api/reviews?query", () => {
-  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key", () => {
+  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case title", () => {
     return request(app)
-      .get("/api/reviews?search_id=title")
+      .get("/api/reviews?sort_by=title")
       .expect(200)
       .then(({ body: { reviews } }) => {
         expect(reviews).toBeSorted({ key: "title", descending: true });
-        expect(reviews[12]).toEqual(
-          expect.objectContaining({
-            review_id: 3,
-            title: "Ultimate Werewolf",
-            designer: "Akihisa Okui",
-            owner: "bainesface",
-            review_img_url:
-              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-            review_body: "We couldn't find the werewolf!",
-            category: "social deduction",
-            created_at: "2021-01-18T10:01:41.251Z",
-            votes: 5,
-            comment_count: 3,
-          })
+        expect(reviews[0].title).toBe("Ultimate Werewolf");
+        expect(reviews[12].title).toBe(
+          "A truly Quacking Game; Quacks of Quedlinburg"
         );
+      });
+  });
+
+  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case designer", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=designer")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "designer", descending: true });
+        expect(reviews[0].designer).toBe("Wolfgang Warsch");
+        expect(reviews[12].designer).toBe("Akihisa Okui");
+      });
+  });
+
+  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case owner", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=owner")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "owner", descending: true });
+        expect(reviews[12].owner).toBe("bainesface");
+        expect(reviews[0].owner).toBe("philippaclaire9");
+      });
+  });
+
+  test("200: Should return a status code of 200 and sort the returned array of reviews by the desired key, in this case category", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=category")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "category", descending: true });
+        expect(reviews[12].category).toBe("dexterity");
+        expect(reviews[0].category).toBe("social deduction");
+      });
+  });
+
+  test("200: Should return a status code of 200 and should return the ordered array in ascending order", () => {
+    return request(app)
+      .get("/api/reviews?order=asc")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "created_at", descending: false });
+        expect(reviews[0].created_at).toBe("1970-01-10T02:08:38.400Z");
+        expect(reviews[12].created_at).toBe("2021-01-25T11:16:54.963Z");
+      });
+  });
+
+  test("200: Should return a status code of 200 and sort and return the ordered array in ascending order by title", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=title&order=asc")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "title", descending: false });
+        expect(reviews[0].title).toBe(
+          "A truly Quacking Game; Quacks of Quedlinburg"
+        );
+        expect(reviews[12].title).toBe("Ultimate Werewolf");
+      });
+  });
+
+  test.only("200: Should return a status code of 200 and sort and return the ordered array in ascending order by designer", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=designer&order=asc")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSorted({ key: "designer", descending: false });
+        expect(reviews[0].designer).toBe("Akihisa Okui");
+        expect(reviews[12].designer).toBe("Wolfgang Warsch");
       });
   });
 });
