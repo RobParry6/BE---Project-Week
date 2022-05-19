@@ -5,6 +5,7 @@ const { fetchUsers } = require("./get-users-model");
 const { addNewComment } = require("./post-comment-model");
 const { fetchAllReviews } = require("./get-all-reviews");
 const { removeComment } = require("./delete-comment-controller");
+const { fetchComments } = require("./get-comments-model");
 
 module.exports = {
   fetchCategories,
@@ -14,4 +15,5 @@ module.exports = {
   addNewComment,
   fetchAllReviews,
   removeComment,
+  fetchComments,
 };
