@@ -10,6 +10,7 @@ const {
 const {
   invalidEndpoint,
   invalidNumberRequest,
+  invalidUserError,
   internalServerError,
   psqlError,
 } = require("./controllers/error-handler-controller");
@@ -28,6 +29,7 @@ app.post("/api/reviews/:review_id/comments", createComment);
 
 app.get("/*", invalidEndpoint);
 app.use(invalidNumberRequest);
+app.use(invalidUserError);
 app.use(psqlError);
 app.use(internalServerError);
 
