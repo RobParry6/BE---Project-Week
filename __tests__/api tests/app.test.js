@@ -41,6 +41,65 @@ describe("GET: /api/categories", () => {
   });
 });
 
+
+describe("POST: /api/reviews/:review_id/comments", () => {
+  test("201: Should return a status code of 201, sucessfully post an object to the database and return the post", () => {
+    const newPost = { user_name: "bainesface", body: "A timeless classic!" };
+
+    return request(app)
+      .post("/api/reviews/13/comments")
+      .send(newPost)
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            body: "A timeless classic!",
+            votes: 0,
+            author: "bainesface",
+            review_id: 13,
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+
+  test("400: Should return a status code of 400 when not all of the necessary keys on the posting comment", () => {
+    const newPost = { user_name: "bainesface" };
+
+    return request(app)
+      .post("/api/reviews/13/comments")
+      .send(newPost)
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
+        );
+      });
+  });
+
+  test("404: Should return a status code of 404 when an invalid review_id number is requested", () => {
+    const newPost = { user_name: "bainesface", body: "A timeless classic!" };
+
+    return request(app)
+      .post("/api/reviews/20000/comments")
+      .send(newPost)
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Requested Item Not Found Within the Database");
+      });
+  });
+
+  test("404: Should return a status code of 404 when the user requesting the post does not exist in the data base", () => {
+    const newPost = { user_name: "zxybeast", body: "One of the greats!" };
+
+    return request(app)
+      .post("/api/reviews/13/comments")
+      .send(newPost)
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Who?! Not sure who you mean! (Route not found: Invalid User)"
+
 describe("GET: /api/reviews/:review_id/comments", () => {
   test("200: Should return a status code of 200 and an array of comments for the given review", () => {
     return request(app)
@@ -213,11 +272,11 @@ describe("PATCH: /api/reviews/:review_id", () => {
       .send(incVotes)
       .expect(201)
       .then(({ body: { review } }) => {
-        expect(review).toEqual(expexcted);
+        expect(review).toEqual(expect.objectContaining(expexcted));
       });
   });
 
-  test("404: SHould return a status code of 404 when a valid number is requested but no review is found", () => {
+  test("404: Should return a status code of 404 when a valid number is requested but no review is found", () => {
     const incVotes = { inc_votes: 1 };
 
     return request(app)
@@ -229,7 +288,7 @@ describe("PATCH: /api/reviews/:review_id", () => {
       });
   });
 
-  test("400: should return a status of 400 when an invalid request is asked", () => {
+  test("400: Should return a status of 400 when an invalid request is asked", () => {
     const incVotes = { inc_votes: 1 };
 
     return request(app)
@@ -243,7 +302,7 @@ describe("PATCH: /api/reviews/:review_id", () => {
       });
   });
 
-  test("400: should return a status of 400 when an invalid request is asked", () => {
+  test("400: Should return a status of 400 when an invalid request is asked", () => {
     const incVotes = { inc_votes: "coolio" };
 
     return request(app)
