@@ -41,7 +41,6 @@ describe("GET: /api/categories", () => {
   });
 });
 
-
 describe("POST: /api/reviews/:review_id/comments", () => {
   test("201: Should return a status code of 201, sucessfully post an object to the database and return the post", () => {
     const newPost = { user_name: "bainesface", body: "A timeless classic!" };
@@ -99,6 +98,10 @@ describe("POST: /api/reviews/:review_id/comments", () => {
       .then(({ body: { message } }) => {
         expect(message).toBe(
           "Who?! Not sure who you mean! (Route not found: Invalid User)"
+        );
+      });
+  });
+});
 
 describe("GET: /api/reviews/:review_id/comments", () => {
   test("200: Should return a status code of 200 and an array of comments for the given review", () => {
@@ -500,7 +503,15 @@ describe("GET: /api/users", () => {
 
 describe("DELETE: /api/comments/:comment_id", () => {
   test("204: Should return a status of 204 and delete the comment at the specific comment_id", () => {
-    return request(app).delete("/api/comments/3").expect(204);
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then(() => {
+        return db.query(`SELECT * FROM comments WHERE comment_id = 3`);
+      })
+      .then(({ rows }) => {
+        expect(rows).toHaveLength(0);
+      });
   });
 
   test("400: Should return a status code of 404 when the comment_id in the path isn't a number", () => {

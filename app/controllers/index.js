@@ -1,11 +1,15 @@
 const { getCategories } = require("./get-categories-controller");
-const { getReview } = require("./get-review-controller");
-const { alterVotesCount } = require("./patch-review-controller");
+const {
+  getReview,
+  getAllReviews,
+  alterVotesCount,
+} = require("./review-controller");
 const { getUsers } = require("./get-users-controller");
-const { getAllReviews } = require("./get-all-reviews");
-const { createComment } = require("./post-comment-controller");
-const { deleteComment } = require("./delete-comment-controller");
-const { getComments } = require("./get-comments-controller");
+const {
+  getComments,
+  createComment,
+  deleteComment,
+} = require("./get-comments-controller");
 
 module.exports = {
   getCategories,
