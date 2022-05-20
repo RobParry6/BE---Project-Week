@@ -3,6 +3,7 @@ const request = require("supertest");
 const app = require("../../app/app");
 const testData = require("../../db/data/test-data");
 const seed = require("../../db/seeds/seed");
+const endpointObject = require("../../endpoints.json");
 
 beforeAll(() => {
   return seed(testData);
@@ -531,6 +532,17 @@ describe("DELETE: /api/comments/:comment_id", () => {
       .expect(404)
       .then(({ body: { message } }) => {
         expect(message).toBe("Requested Item Not Found Within the Database");
+      });
+  });
+});
+
+describe("GET /api", () => {
+  test("200: Should return a status of 200 and a JSON object when the /api endpoint is called", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(endpointObject);
       });
   });
 });
