@@ -1,10 +1,10 @@
-const { fetchCategories } = require("./get-categories-model");
+const { fetchCategories } = require("./categories-model");
 const {
   fetchReview,
   fetchAllReviews,
   changeVotesProperty,
 } = require("./review-model");
-const { fetchUsers } = require("./get-users-model");
+const { fetchUsers } = require("./users-model");
 const {
   fetchComments,
   addNewComment,
