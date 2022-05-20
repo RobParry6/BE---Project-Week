@@ -4,8 +4,8 @@ const { alterVotesCount } = require("./patch-review-controller");
 const { getUsers } = require("./get-users-controller");
 const { getAllReviews } = require("./get-all-reviews");
 const { createComment } = require("./post-comment-controller");
+const { deleteComment } = require("./delete-comment-controller");
 const { getComments } = require("./get-comments-controller");
-
 
 module.exports = {
   getCategories,
@@ -14,5 +14,6 @@ module.exports = {
   getUsers,
   getAllReviews,
   createComment,
+  deleteComment,
   getComments,
 };

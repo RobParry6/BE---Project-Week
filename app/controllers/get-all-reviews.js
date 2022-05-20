@@ -7,7 +7,6 @@ exports.getAllReviews = (request, response, next) => {
       response.status(200).send({ reviews });
     })
     .catch((err) => {
-      console.log(err);
       next(err);
     });
 };
