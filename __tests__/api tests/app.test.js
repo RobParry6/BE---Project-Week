@@ -3,7 +3,7 @@ const request = require("supertest");
 const app = require("../../app/app");
 const testData = require("../../db/data/test-data");
 const seed = require("../../db/seeds/seed");
-const getJSONfile = require("../../endpoints.json");
+const endpointObject = require("../../endpoints.json");
 
 beforeAll(() => {
   return seed(testData);
@@ -542,7 +542,7 @@ describe("GET /api", () => {
       .get("/api")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual(getJSONfile);
+        expect(body).toEqual(endpointObject);
       });
   });
 });

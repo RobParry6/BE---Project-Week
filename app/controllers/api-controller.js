@@ -1,5 +1,5 @@
-const getJSONfile = require("../../endpoints.json");
+const endpointObject = require("../../endpoints.json");
 
 exports.getApi = (request, response, next) => {
-  response.status(200).send(getJSONfile);
+  response.status(200).send(endpointObject);
 };
