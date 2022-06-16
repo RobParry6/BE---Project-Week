@@ -3,7 +3,7 @@ const { fetchReview } = require("./review-model");
 
 exports.fetchComments = (review_id) => {
   const commentPromise = db.query(
-    `SELECT * FROM comments WHERE review_id = $1;`,
+    `SELECT * FROM comments WHERE review_id = $1 ORDER BY comments.created_at DESC;`,
     [review_id]
   );
 
