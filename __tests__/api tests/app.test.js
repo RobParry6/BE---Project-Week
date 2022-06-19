@@ -518,6 +518,15 @@ describe("GET: /api/users/:username", () => {
         );
       });
   });
+
+  test("404: should return a status code of 404 when an incorrect path is asked for", () => {
+    return request(app)
+      .get("/api/users/20000")
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Requested Item Not Found Within the Database");
+      });
+  });
 });
 
 describe("DELETE: /api/comments/:comment_id", () => {
