@@ -491,18 +491,18 @@ describe("Reviews", () => {
   });
 
   describe("POST: /api/reviews", () => {
-    const newReview = {
-      title: "Mysterium",
-      designer: "Oleksandr Nevskiy/Oleg Sidorenko",
-      owner: "philippaclaire9",
-      review_img_url:
-        "https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Mysterium_board_game_cover.jpg/220px-Mysterium_board_game_cover.jpg",
-      review_body:
-        "It's interesting to see everybodies interpretations of the images",
-      category: "euro game",
-    };
-
     test("201: Should return a status code of 201 and create a new review entry when the endpoint is called.", () => {
+      const newReview = {
+        title: "Mysterium",
+        designer: "Oleksandr Nevskiy/Oleg Sidorenko",
+        owner: "philippaclaire9",
+        review_img_url:
+          "https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Mysterium_board_game_cover.jpg/220px-Mysterium_board_game_cover.jpg",
+        review_body:
+          "It's interesting to see everybodies interpretations of the images",
+        category: "euro game",
+      };
+
       const createdReview = {
         title: "Mysterium",
         designer: "Oleksandr Nevskiy/Oleg Sidorenko",
@@ -514,6 +514,7 @@ describe("Reviews", () => {
         category: "euro game",
         review_id: 14,
         votes: 0,
+        comment_count: 0,
         created_at: expect.any(String),
       };
 
@@ -522,7 +523,43 @@ describe("Reviews", () => {
         .send(newReview)
         .expect(201)
         .then(({ body: { review } }) => {
-          expect(review).toEqual(expect.objectContaining(createdReview));
+          expect(review).toEqual(
+            expect.objectContaining({
+              title: "Mysterium",
+              designer: "Oleksandr Nevskiy/Oleg Sidorenko",
+              owner: "philippaclaire9",
+              review_img_url:
+                "https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Mysterium_board_game_cover.jpg/220px-Mysterium_board_game_cover.jpg",
+              review_body:
+                "It's interesting to see everybodies interpretations of the images",
+              category: "euro game",
+              review_id: 14,
+              votes: 0,
+              comment_count: 0,
+              created_at: expect.any(String),
+            })
+          );
+        });
+    });
+
+    test("400: Should return a code of 400 when the not all of the fields are correct or missing", () => {
+      const newReview = {
+        designer: "Oleksandr Nevskiy/Oleg Sidorenko",
+        review_img_url:
+          "https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Mysterium_board_game_cover.jpg/220px-Mysterium_board_game_cover.jpg",
+        review_body:
+          "It's interesting to see everybodies interpretations of the images",
+        category: "deck building",
+      };
+
+      return request(app)
+        .post("/api/reviews")
+        .send(newReview)
+        .expect(400)
+        .then(({ body: { message } }) => {
+          expect(message).toBe(
+            "Bad Request, Very Bad Request! (Invalid Request)"
+          );
         });
     });
   });

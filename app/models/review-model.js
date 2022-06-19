@@ -96,6 +96,7 @@ exports.createReview = ({
       [title, category, designer, owner, review_body, review_img_url]
     )
     .then(({ rows }) => {
+      rows[0].comment_count = 0;
       return rows;
     });
 };

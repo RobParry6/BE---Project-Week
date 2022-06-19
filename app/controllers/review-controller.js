@@ -41,7 +41,11 @@ exports.alterVotesCount = (request, response, next) => {
 
 exports.postReview = (request, response, next) => {
   const newReview = request.body;
-  createReview(newReview).then(([review]) => {
-    response.status(201).send({ review });
-  });
+  createReview(newReview)
+    .then(([review]) => {
+      response.status(201).send({ review });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
