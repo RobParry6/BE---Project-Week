@@ -1,6 +1,5 @@
 const { getCategories } = require("./categories-controller");
 const { getUsers, getUser } = require("./users-controller");
-const { getApi } = require("./api-controller");
 const {
   getReview,
   getAllReviews,
@@ -10,6 +9,7 @@ const {
   getComments,
   createComment,
   deleteComment,
+  patchComment,
 } = require("./comments-controller");
 
 module.exports = {
@@ -21,6 +21,6 @@ module.exports = {
   createComment,
   deleteComment,
   getComments,
-  getApi,
   getUser,
+  patchComment,
 };

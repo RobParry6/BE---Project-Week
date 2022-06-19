@@ -9,6 +9,7 @@ const {
   fetchComments,
   addNewComment,
   removeComment,
+  updateComment,
 } = require("./comments-model");
 
 module.exports = {
@@ -21,4 +22,5 @@ module.exports = {
   removeComment,
   fetchComments,
   fetchUser,
+  updateComment,
 };

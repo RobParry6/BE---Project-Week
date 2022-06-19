@@ -563,6 +563,64 @@ describe("DELETE: /api/comments/:comment_id", () => {
   });
 });
 
+describe("PATCH: /api/comments/:comment_id", () => {
+  const incVotes = { inc_votes: 1 };
+
+  test("201: Should return status code of 201 when a sucessful patch request is made to the review endpoint. Should send an object with a property of inc_votes with increments the votes by the desired amount", () => {
+    const expexcted = {
+      body: "I loved this game too!",
+      votes: 17,
+      author: "bainesface",
+      review_id: 2,
+      created_at: "2017-11-22T12:43:33.389Z",
+    };
+
+    return request(app)
+      .patch("/api/comments/1")
+      .send(incVotes)
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual(expect.objectContaining(expexcted));
+      });
+  });
+
+  test("404: SHould return a status of 404 when an incorrect comment id is requested", () => {
+    return request(app)
+      .patch("/api/comments/20000")
+      .send(incVotes)
+      .expect(404)
+      .then(({ body: { message } }) => {
+        expect(message).toBe("Requested Item Not Found Within the Database");
+      });
+  });
+
+  test("400: Should return a status code of 400 when anything but a number is called at the endpoint", () => {
+    return request(app)
+      .patch("/api/comments/coolio")
+      .send(incVotes)
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
+        );
+      });
+  });
+
+  test("400: Should return a status code of 400 when anything but a number is sent to the endpoint on the body", () => {
+    const incWrongVotes = { inc_votes: "coolio" };
+
+    return request(app)
+      .patch("/api/comments/1")
+      .send(incWrongVotes)
+      .expect(400)
+      .then(({ body: { message } }) => {
+        expect(message).toBe(
+          "Bad Request, Very Bad Request! (Invalid Request)"
+        );
+      });
+  });
+});
+
 describe("GET /api", () => {
   test("200: Should return a status of 200 and a JSON object when the /api endpoint is called", () => {
     return request(app)
