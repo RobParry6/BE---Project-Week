@@ -2,6 +2,7 @@ const {
   fetchReview,
   fetchAllReviews,
   changeVotesProperty,
+  createReview,
 } = require("../models");
 
 exports.getReview = (request, response, next) => {
@@ -36,4 +37,11 @@ exports.alterVotesCount = (request, response, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.postReview = (request, response, next) => {
+  const newReview = request.body;
+  createReview(newReview).then(([review]) => {
+    response.status(201).send({ review });
+  });
 };

@@ -3,6 +3,7 @@ const {
   fetchReview,
   fetchAllReviews,
   changeVotesProperty,
+  createReview,
 } = require("./review-model");
 const { fetchUsers, fetchUser } = require("./users-model");
 const {
@@ -23,4 +24,5 @@ module.exports = {
   fetchComments,
   fetchUser,
   updateComment,
+  createReview,
 };

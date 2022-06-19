@@ -4,6 +4,7 @@ const {
   getReview,
   getAllReviews,
   alterVotesCount,
+  postReview,
 } = require("./review-controller");
 const {
   getComments,
@@ -23,4 +24,5 @@ module.exports = {
   getComments,
   getUser,
   patchComment,
+  postReview,
 };

@@ -81,3 +81,21 @@ exports.changeVotesProperty = (review_id, inc_votes) => {
       } else return rows[0];
     });
 };
+
+exports.createReview = ({
+  title,
+  designer,
+  owner,
+  review_img_url,
+  review_body,
+  category,
+}) => {
+  return db
+    .query(
+      "INSERT INTO reviews (title, category, designer, owner, review_body, review_img_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;",
+      [title, category, designer, owner, review_body, review_img_url]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
