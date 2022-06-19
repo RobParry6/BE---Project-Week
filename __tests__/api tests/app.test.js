@@ -502,6 +502,24 @@ describe("GET: /api/users", () => {
   });
 });
 
+describe("GET: /api/users/:username", () => {
+  test("200: Should return a user object of the required user and a status code of 200 when a correct username is called.", () => {
+    return request(app)
+      .get("/api/users/bainesface")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(user).toEqual(
+          expect.objectContaining({
+            username: "bainesface",
+            name: "sarah",
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+          })
+        );
+      });
+  });
+});
+
 describe("DELETE: /api/comments/:comment_id", () => {
   test("204: Should return a status of 204 and delete the comment at the specific comment_id", () => {
     return request(app)

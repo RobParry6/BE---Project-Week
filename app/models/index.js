@@ -4,7 +4,7 @@ const {
   fetchAllReviews,
   changeVotesProperty,
 } = require("./review-model");
-const { fetchUsers } = require("./users-model");
+const { fetchUsers, fetchUser } = require("./users-model");
 const {
   fetchComments,
   addNewComment,
@@ -20,4 +20,5 @@ module.exports = {
   fetchAllReviews,
   removeComment,
   fetchComments,
+  fetchUser,
 };

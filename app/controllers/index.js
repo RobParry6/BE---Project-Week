@@ -1,5 +1,5 @@
 const { getCategories } = require("./categories-controller");
-const { getUsers } = require("./users-controller");
+const { getUsers, getUser } = require("./users-controller");
 const { getApi } = require("./api-controller");
 const {
   getReview,
@@ -22,4 +22,5 @@ module.exports = {
   deleteComment,
   getComments,
   getApi,
+  getUser,
 };
